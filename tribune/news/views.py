@@ -2,11 +2,21 @@ from django.shortcuts import render ,redirect
 import datetime as dt
 from django.http  import HttpResponse,Http404
 from .models import Article,tags
+from .forms import NewsLetterForm
+
 #
 def news_today(request):
     date = dt.date.today()
     news = Article.todays_news()
-    return render(request, 'all-news/today-news.html',{'date': date,"news":news})
+
+    if request.method == 'POST':
+        form = NewsLetterForm(request.POST)
+        if form.is_valid():
+            print('valid')
+    else:
+        form = NewsLetterForm()
+    return render(request, 'all-news/today-news.html', {"date": date,"news":news,"letterForm":form})
+
 
 
 
